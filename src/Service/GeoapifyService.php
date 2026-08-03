@@ -50,11 +50,13 @@ class GeoapifyService
             if ($statusCode === 200) {
                 $response = $request->toArray();
             } else {
+                $paramsWithoutApiKey = $params;
+                unset($paramsWithoutApiKey['apiKey']);
                 throw new \RuntimeException(sprintf(
                     'Geoapify "%s" request failed with status %d (params: %s)',
                     $action,
                     $statusCode,
-                    json_encode($params, JSON_THROW_ON_ERROR),
+                    json_encode($paramsWithoutApiKey, JSON_THROW_ON_ERROR),
                 ));
             }
         } else {
