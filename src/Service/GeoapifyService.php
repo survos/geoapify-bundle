@@ -48,9 +48,14 @@ class GeoapifyService
             ]);
             $statusCode = $request->getStatusCode();
             if ($statusCode === 200) {
-                $response =  $request->toArray();
+                $response = $request->toArray();
             } else {
-                dd($action, $params, $statusCode);
+                throw new \RuntimeException(sprintf(
+                    'Geoapify "%s" request failed with status %d (params: %s)',
+                    $action,
+                    $statusCode,
+                    json_encode($params, JSON_THROW_ON_ERROR),
+                ));
             }
         } else {
             assert(false,"inject http client");
