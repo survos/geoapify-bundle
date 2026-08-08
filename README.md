@@ -19,7 +19,24 @@ survos_geoapify:
   api_key: '%env(GEOAPIFY_API_KEY)%'
 ```
 
+## Fetch strategy (cache/retry)
 
+`GeoapifyService` fetches through `survos/fetch-bundle`'s `PersistentFetcherInterface`, not a
+raw `HttpClientInterface`. If a lookup looks stale or stuck, this is where to look:
+
+- **Cache:** keyed by the full request URL (including `apiKey`), cached **forever** — until
+  the app calls `forget($url)` or passes `force_fetch: true` — in a SQLite pool at
+  `var/data/fetch_cache.db` (survives `cache:clear` and process restarts). There is no TTL by
+  default, so a bad/empty response for a given lat/lng or query string will keep being served
+  until explicitly forgotten.
+- **Retry:** up to 5 attempts, full-jitter exponential backoff (200ms base, 10s cap), on
+  transport errors, HTTP 429, and 5xx — see `ExponentialBackoffRetry` in fetch-bundle.
+- **Local `.wip` hosts:** routed through the Symfony CLI local proxy automatically (not
+  applicable to Geoapify's real endpoint, but shared by every fetch-bundle consumer).
+
+Before 2026-08-08 this bundle had its own `CacheInterface`/scoped-HTTP-client wiring, but the
+cache reference was never actually connected — every lookup was silently uncached. See
+[survos/mono@ec4f9a06](https://github.com/survos/mono/commit/ec4f9a06).
 
 ## Trivial but functional application
 
