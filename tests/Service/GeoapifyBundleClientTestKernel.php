@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Survos\GeoapifyBundle\Tests\Service;
 
 use Survos\GeoapifyBundle\SurvosGeoapifyBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
-use PHPUnit\Framework\TestCase;
 
 class GeoapifyBundleClientTestKernel extends Kernel
 {
@@ -25,5 +26,3 @@ class GeoapifyBundleClientTestKernel extends Kernel
         return __DIR__.'/cache/'.spl_object_hash($this);
     }
 }
-
-

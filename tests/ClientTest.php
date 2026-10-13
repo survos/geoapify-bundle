@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Survos\GeoapifyBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -14,7 +16,7 @@ class ClientTest extends TestCase
         $kernel->boot();
         $container = $kernel->getContainer();
         $client = $container->get('survos_geoapify_service');
-//        $client = $container->get(GeoapifyService::class);
+        //        $client = $container->get(GeoapifyService::class);
         $this->assertInstanceOf(GeoapifyService::class, $client);
 
         $x = $client->reverseGeocode(0.0, 0.0);

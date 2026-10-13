@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Survos\GeoapifyBundle;
 
 use Survos\GeoapifyBundle\Service\GeoapifyService;
@@ -12,18 +14,14 @@ class SurvosGeoapifyBundle extends AbstractBundle
 {
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-
-// Lookup domain information
+        // Lookup domain information
         $serviceId = 'survos_geoapify_service';
         $container->services()->alias(GeoapifyService::class, $serviceId);
         $builder->autowire($serviceId, GeoapifyService::class)
             ->setAutoconfigured(true)
             ->setArgument('$apiKey', $config['api_key'])
             ->setPublic(true);
-
     }
-
-
 
     public function configure(DefinitionConfigurator $definition): void
     {
